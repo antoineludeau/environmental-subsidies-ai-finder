@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import { useState, FormEvent, useEffect } from "react";
+import { useState, FormEvent, useEffect, useRef } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL
@@ -24,6 +24,7 @@ interface Subvention {
 const sessionID = uuidv4();
 
 const Home: React.FC = () => {
+  const chatContainerRef = useRef<HTMLDivElement>(null);
   const [message, setMessage] = useState<string>("");
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -36,6 +37,13 @@ const Home: React.FC = () => {
     detail: "",
     url: "",
   });
+
+  useEffect(() => {
+    // Scroll to the bottom of the chat container when chatHistory changes
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    }
+  }, [chatHistory, subvention]);
 
   const sendMessage = async (e: FormEvent) => {
     e?.preventDefault();
@@ -132,7 +140,7 @@ const Home: React.FC = () => {
         </h2>
 
         <div className=" w-full bg-white rounded-lg shadow-md p-6 mb-6">
-          <div className="flex flex-col h-80 overflow-y-auto mb-4 p-3 bg-gray-100 rounded">
+          <div  ref={chatContainerRef} className="flex flex-col h-80 overflow-y-auto mb-4 p-3 bg-gray-100 rounded">
             {chatHistory.map((chat, index) => (
               <div
                 key={index}
