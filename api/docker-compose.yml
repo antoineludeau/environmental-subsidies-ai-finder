@@ -1,0 +1,22 @@
+services:
+  api:
+    build: 
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "${PORT_API:-5000}:${PORT_API:-5000}"
+    environment:
+      - PORT=${PORT_API:-5000}
+    volumes:
+      - .:/app   # Mounts the current directory to /app in the container
+      - /app/node_modules   # Avoids overwriting node_modules in the container
+  database:
+    image: mongo
+    ports:
+      - "${PORT_DB:-27017}:27017"
+    volumes:
+      - mongo-data:/data/db
+      - ./mongo/init-scripts:/docker-entrypoint-initdb.d  # Mount the init script directory
+
+volumes:
+  mongo-data:

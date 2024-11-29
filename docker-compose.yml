@@ -1,0 +1,59 @@
+services:
+  api:
+    build: 
+      context: ./api/
+      dockerfile: Dockerfile.dev
+    ports:
+      - "${PORT_API:-3002}:${PORT_API:-3002}"
+    environment:
+      - PORT=${PORT_API:-3002}
+      - DB_URL=mongodb://database:${PORT_DB:-27017}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+    volumes:
+      - ./api/:/app 
+      - /app/node_modules 
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:${PORT_API:-3002}/health"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    depends_on:
+      database:
+        condition: service_healthy
+  database:
+    image: mongo
+    ports:
+      - "${PORT_DB:-27017}:27017"
+    volumes:
+      - mongo-data:/data/db
+      - ./api/mongo/init-scripts:/docker-entrypoint-initdb.d
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "mongosh",
+          "--quiet",
+          "127.0.0.1/subventions",
+          "--eval",
+          "'quit(db.runCommand({ ping: 1 }).ok ? 0 : 2)'",
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+  interface:
+    build: 
+      context: ./interface/
+      dockerfile: Dockerfile.dev
+    ports:
+      - "${PORT_INTERFACE:-3000}:${PORT_INTERFACE:-3000}"
+    environment:
+      - PORT=${PORT_INTERFACE:-3000}
+      - NEXT_PUBLIC_API_URL=http://localhost:${PORT_API:-3002}
+    volumes:
+      - ./interface/:/app 
+      - /app/node_modules 
+    depends_on:
+      api:
+        condition: service_healthy
+volumes:
+  mongo-data:
