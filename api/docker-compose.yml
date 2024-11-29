@@ -7,6 +7,8 @@ services:
       - "${PORT_API:-5000}:${PORT_API:-5000}"
     environment:
       - PORT=${PORT_API:-5000}
+      - DB_URL=mongodb://database:${PORT_DB:-27017}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
     volumes:
       - .:/app   # Mounts the current directory to /app in the container
       - /app/node_modules   # Avoids overwriting node_modules in the container
