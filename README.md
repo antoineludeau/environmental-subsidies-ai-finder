@@ -18,6 +18,10 @@ docker compose up --build -d
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+## Architecture
+
+![Presentation](https://github.com/user-attachments/assets/4b510f2a-8709-49ed-9089-b419b19d5911)
+
 ## Credits
 
 This poject uses :
