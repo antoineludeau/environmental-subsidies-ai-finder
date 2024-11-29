@@ -20,7 +20,8 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## Architecture
 
-![Presentation](https://github.com/user-attachments/assets/4b510f2a-8709-49ed-9089-b419b19d5911)
+![presentation](https://github.com/user-attachments/assets/f37ad1bb-66af-4c4d-b925-e101b984b87a)
+
 
 ## Credits
 
