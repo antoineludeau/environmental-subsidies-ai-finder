@@ -1,12 +1,11 @@
 import express, { Request, Response, NextFunction } from 'express';
-
-
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
 import { OpenAI } from 'openai';
 import { v4 as uuidv4 } from 'uuid';
 import mongoose from 'mongoose';
+
 import Subvention from './subvention.model.js';
 
 dotenv.config();
@@ -29,23 +28,17 @@ interface Session {
   isInit: boolean;
 }
 
+interface DataToGetFromUser {
+  [key: string]: string;
+}
+
 const language = "french";
 const sessions: Record<string, Session> = {}; // In-memory store for sessions
 
 // Initialize OpenAI API client
 const client = new OpenAI({
-  apiKey: OPENAI_API_KEY || "", // Ensure API key is provided
+  apiKey: OPENAI_API_KEY || "",
 });
-
-const app = express();
-
-// Middleware
-app.use(cors());
-app.use(bodyParser.json());
-
-interface DataToGetFromUser {
-  [key: string]: string;
-}
 
 // Data structure
 const dataToGetFromUser: DataToGetFromUser  = {
@@ -54,12 +47,21 @@ const dataToGetFromUser: DataToGetFromUser  = {
   city: "In which city the user lives ?",
 };
 
+// Valid options for each element to get from the user
 const validOptions: Record<string, string[]> = {
   job: ["mayor", "farmer", "teacher", "doctor", "engineer", "student", "unemployed", "other"],
   topic: ["agriculture", "energy", "solar", "biodiversity", "mobility", "waste", "water", "circularity"],
   city: ["An existing city in France"],
 };
 
+// Create the express app
+const app = express();
+
+// Middlewares
+app.use(cors());
+app.use(bodyParser.json());
+
+// Session middleware
 app.use((req: Request, res: Response, next: NextFunction) => {
   const sessionId = (req.headers['session-id'] as string) || uuidv4();
   if (!sessions[sessionId]) {
@@ -71,12 +73,13 @@ app.use((req: Request, res: Response, next: NextFunction) => {
     };
   }
   
-  // Now TypeScript knows about sessionId and session from your global declaration
   req.sessionId = sessionId;
   req.session = sessions[sessionId];
   next();
 });
 
+
+// Health check
 app.get('/health', async (_req: Request, res: Response): Promise<void> => {
   try {
     if (mongoose.connection.readyState !== 1) {
@@ -89,6 +92,7 @@ app.get('/health', async (_req: Request, res: Response): Promise<void> => {
   }
 });
 
+// Chat endpoint
 app.post('/chat', async (req: Request, res: Response) => {
   const { message } = req.body;
   const session: Session = req['session'] as Session;
@@ -210,26 +214,36 @@ app.post('/chat', async (req: Request, res: Response) => {
     res.end();
   } catch (error) {
     console.error('Error:', error);
-    res.status(500).json({ error: 'Something went wrong!' });
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 });
 
+// Get subventions by topic
 app.get('/subventions/:topic', async (req: Request, res: Response) => {
-  const { topic } = req.params;
-  const topicFormatted = topic.toLowerCase();
-  const subventions = await Subvention.findOne({ key: topicFormatted });
-  res.json(subventions);
+  try {
+    const { topic } = req.params;
+    const topicFormatted = topic.toLowerCase();
+    const subventions = await Subvention.findOne({ key: topicFormatted });
+    res.json(subventions);
+  } catch (error) {
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 });
 
+// Get a session by ID
 app.get('/session/:id', (req: Request, res: Response) => {
-  const { id } = req.params;
-  const session = sessions[id];
-  res.json(session);
+  try {
+    const { id } = req.params;
+    const session = sessions[id];
+    res.json(session);
+  } catch (error) {
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 });
 
 // Start the server
 app.listen(Number(PORT), async () => {
-  console.log(`Server running on http://localhost:${PORT}`);
   await mongoose.connect(`${DB_URL}/subventions`);
   console.log('Connected to the database.');
+  console.log(`Server running on http://localhost:${PORT}`);
 });
