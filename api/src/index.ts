@@ -10,7 +10,7 @@ import Subvention from './subvention.model.js';
 
 dotenv.config();
 
-const { PORT, DB_URL, OPENAI_API_KEY } = process.env;
+const { PORT, DB_URL, OPENAI_API_KEY, CHAT_LANGUAGE } = process.env;
 
 declare global {
   namespace Express {
@@ -32,7 +32,7 @@ interface DataToGetFromUser {
   [key: string]: string;
 }
 
-const language = "french";
+const language = CHAT_LANGUAGE; 
 const sessions: Record<string, Session> = {}; // In-memory store for sessions
 
 // Initialize OpenAI API client
