@@ -7,16 +7,14 @@ A chat app with a llm with the purpose of finding environmental subisidies that 
 ### Local depoyment with docker
 
 - Create an .env file from .env.sample,
-
 - Enter your OPENAI_API_KEY in the .env file,
-
 - Simply run the following command :
 
 ```bash
 docker compose up --build -d
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) (depending of your PORT_INTERFACE env variable) with your browser to see the result.
 
 ## Architecture
 
