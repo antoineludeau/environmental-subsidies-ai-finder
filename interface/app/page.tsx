@@ -127,8 +127,8 @@ const Home: React.FC = () => {
     <div className="flex flex-col items-center min-h-screen bg-gray-100 p-4">
       <div className="flex min-h-screen justify-center items-center">
         <Image
-          src="/presentation.png"
-          alt="presentation-schema"
+          src="/architecture.png"
+          alt="architecture-schema"
           width={800}
           height={800}
         />
