@@ -46,9 +46,8 @@ services:
       context: ./interface/
       dockerfile: Dockerfile.dev
     ports:
-      - "${PORT_INTERFACE:-3000}:${PORT_INTERFACE:-3000}"
+      - "${PORT_INTERFACE:-3000}:3000"
     environment:
-      - PORT=${PORT_INTERFACE:-3000}
       - NEXT_PUBLIC_API_URL=http://localhost:${PORT_API:-3002}
     volumes:
       - ./interface/:/app 
