@@ -1,5 +1,5 @@
 {
-  "name": "environmental-subsidies-finder-api",
+  "name": "environmental-subsidies-ai-finder-api",
   "version": "1.0.0",
   "main": "dist/index.js",
   "type": "module",

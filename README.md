@@ -1,4 +1,4 @@
-# Environmental Subsidies Finder
+# Environmental Subsidies AI Finder
 
 A chat app with a llm with the purpose of finding environmental subisidies that fits with the user needs.
 
