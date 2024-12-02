@@ -3,7 +3,7 @@ import Image from "next/image";
 import { useState, FormEvent, useEffect, useRef } from "react";
 import { v4 as uuidv4 } from "uuid";
 
-const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL
+const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 interface ChatMessage {
   role: "user" | "assistant";
@@ -38,10 +38,11 @@ const Home: React.FC = () => {
     url: "",
   });
 
+  // Auto scroll to the bottom of the chat container
   useEffect(() => {
-    // Scroll to the bottom of the chat container when chatHistory changes
     if (chatContainerRef.current) {
-      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+      chatContainerRef.current.scrollTop =
+        chatContainerRef.current.scrollHeight;
     }
   }, [chatHistory, subvention]);
 
@@ -51,11 +52,9 @@ const Home: React.FC = () => {
 
     setLoading(true);
 
-    // Add user message to chat history
     const userMessage: ChatMessage = { role: "user", content: message };
     setChatHistory((prevHistory) => [...prevHistory, userMessage]);
 
-    // Clear the message input
     setMessage("");
 
     await getMessageResponse(message);
@@ -78,8 +77,6 @@ const Home: React.FC = () => {
 
       // Prepare an empty message for bot that will be updated progressively
       const botMessage: ChatMessage = { role: "assistant", content: "" };
-
-      // Add an empty bot message to chat history (to be updated as the response streams)
       setChatHistory((prevHistory) => [...prevHistory, botMessage]);
 
       if (reader) {
@@ -91,10 +88,12 @@ const Home: React.FC = () => {
           chatResponse += chunk;
 
           // Gradually update the bot's message in chat history
+          // Remove the last bot message
+          // Append the updated bot message
           botMessage.content = chatResponse;
           setChatHistory((prevHistory) => [
-            ...prevHistory.slice(0, prevHistory.length - 1), // Remove the last bot message
-            botMessage, // Append the updated bot message
+            ...prevHistory.slice(0, prevHistory.length - 1),
+            botMessage,
           ]);
         }
       }
@@ -140,7 +139,10 @@ const Home: React.FC = () => {
         </h2>
 
         <div className=" w-full bg-white rounded-lg shadow-md p-6 mb-6">
-          <div  ref={chatContainerRef} className="flex flex-col h-80 overflow-y-auto mb-4 p-3 bg-gray-100 rounded">
+          <div
+            ref={chatContainerRef}
+            className="flex flex-col h-80 overflow-y-auto mb-4 p-3 bg-gray-100 rounded"
+          >
             {chatHistory.map((chat, index) => (
               <div
                 key={index}
@@ -186,7 +188,9 @@ const Home: React.FC = () => {
               {loading ? "Sending..." : "Send"}
             </button>
           </form>
-          <div className="pt-4">Data extracted from chat : {JSON.stringify(session.data)}</div>
+          <div className="pt-4">
+            Data extracted from chat : {JSON.stringify(session.data)}
+          </div>
         </div>
       </div>
     </div>
