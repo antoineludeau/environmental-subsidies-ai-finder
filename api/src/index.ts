@@ -150,7 +150,7 @@ app.post('/chat', async (req: Request, res: Response) => {
     const isValid = isValidResponseContent.startsWith('Yes');
 
     if (isValid) {
-      const response = isValidResponseContent.split('-').map(str => str.trim());
+      const response = isValidResponseContent.split('-').map(str => str.replace(/[^a-zA-Z]/g, ''));
       const key : keyof Session['data'] = response[1] as keyof Session['data'];
       const validOption = response[2];
       session.data[key] = validOption;
