@@ -1,5 +1,5 @@
 "use client";
-import Image from "next/image";
+
 import { useState, FormEvent, useEffect, useRef } from "react";
 import { v4 as uuidv4 } from "uuid";
 
@@ -125,19 +125,11 @@ const Home: React.FC = () => {
   }, [session]);
 
   return (
-    <div className="flex flex-col items-center min-h-screen bg-gray-100 p-4">
-      <div className="flex min-h-screen justify-center items-center">
-        <Image
-          src="/architecture.png"
-          alt="architecture-schema"
-          width={800}
-          height={800}
-        />
-      </div>
+    <div className="flex flex-col items-center min-h-screen bg-gray-100">
       <div className="flex flex-col items-center justify-center min-h-screen w-full max-w-xl">
-        <h2 className="w-fit mb-10 mt-12 px-2 text-center font-light text-3xl uppercase bg-gradient-to-r from-yellow-400 to-yellow-400/70 bg-no-repeat bg-100%_20px bg-bottom rounded-lg">
+        <h1 className="w-fit mb-10 mt-12 px-2 text-center font-light text-3xl uppercase bg-gradient-to-r from-yellow-400 to-yellow-400/70 bg-no-repeat bg-100%_20px bg-bottom rounded-lg">
           Find Your Subsidies
-        </h2>
+        </h1>
 
         <div className=" w-full bg-white rounded-lg shadow-md p-6 mb-6">
           <div
