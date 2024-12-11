@@ -93,8 +93,32 @@ Open http://localhost:3000 in your browser to view the application.
 
   ```bash
   environmental-subsidies-ai-finder/
-  ├── api/                    # api code folder
+  ├── api/                    # API code folder
+  │   ├── mongo/              # Mongo init scripts
+  │   ├── src/                # Source code folder
+  │   ├── .dockerignore       # Docker ignore file
+  │   ├── .env.sample         # Env sample file to copy as .env file
+  │   ├── .gitignore          # Git ignore file
+  │   ├── compose.yml         # Docker Compose configuration
+  │   ├── Dockerfile.dev      # Docker configuration for development
+  │   ├── nodemon.json        # Docker configuration for development
+  │   ├── package-lock.json   # Lock file for npm dependencies
+  │   ├── package.json        # Project dependencies and scripts
+  │   └── tsconfig.json       # TypeScript configuration file
   ├── interface/              # interface code folder
+  │   ├── app/                # Next.js 'app' directory for routing and pages
+  │   ├── public/             # Static assets (images, fonts, etc.)
+  │   ├── .dockerignore       # Docker ignore file
+  │   ├── .env.sample         # Env sample file to copy as .env file
+  │   ├── .eslintrc.json      # ESLint configuration file
+  │   ├── .gitignore          # Git ignore file
+  │   ├── Dockerfile.dev      # Docker configuration for development
+  │   ├── next.config.mjs     # Next.js configuration file
+  │   ├── package-lock.json   # Lock file for npm dependencies
+  │   ├── package.json        # Project dependencies and scripts
+  │   ├── postcss.config.mjs  # PostCSS configuration for Tailwind CSS
+  │   ├── tailwind.config.ts  # Tailwind CSS configuration
+  │   └── tsconfig.json       # TypeScript configuration file
   ├── .env.sample             # Env sample file to copy as .env file
   ├── .gitignore              # Git ignore file
   ├── compose.yml             # Docker Compose configuration
