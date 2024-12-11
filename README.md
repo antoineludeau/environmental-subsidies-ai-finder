@@ -2,8 +2,11 @@
 
 This chat application is designed to leverage the power of a Large Language Model (LLM), such as OpenAI's GPT, to assist users in discovering environmental subsidies that align with their specific requirements. The app simplifies the process of navigating through complex policies, terms, and regional programs to identify subsidies that users might qualify for.
 
+
 <p align="center">
+  <img width="619" alt="Capture d’écran 2024-12-11 à 14 32 23" src="https://github.com/user-attachments/assets/49cadd14-782e-4b94-a40b-56f122b61b13" />
 </p>
+
 
 ## Table of Contents
 
@@ -11,6 +14,7 @@ This chat application is designed to leverage the power of a Large Language Mode
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
+- [Architecture](#architecture)
 - [Folder Structure](#folder-structure)
 - [License](#license)
 
@@ -79,6 +83,11 @@ This command will build and run 3 services :
 
 Open http://localhost:3000 in your browser to view the application.
 
+## Architecture
+
+<p align="center">
+  <img width="847" alt="Capture d’écran 2024-12-11 à 14 33 35" src="https://github.com/user-attachments/assets/b8113c0f-47e5-4b04-8714-6d041de42300" />
+</p>
 
 ## Folder structure
 
