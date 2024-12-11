@@ -98,30 +98,33 @@ app.post('/chat', async (req: Request, res: Response) => {
   const session: Session = req['session'] as Session;
   const isInit = session.isInit;
 
-  const initPrompt = `
-    General information:
+  const basePrompt = `
     You are an AI assistant that will help a user to find information about environmental subsidies,
     by chatting and trying to extract information from the user.
     Here is the data you need to extract from the user: ${JSON.stringify(dataToGetFromUser)}.
-    Your answers must be in the following language: "${language}", in formal language.
-    Your answers must not contain any quotes.
-    You must always answer as if you were talking directly to the user.
   `;
+
+  const additionnalInstructions = `
+    Additional guidelines:
+    - You must always answer as if you were talking directly to the user.
+    - Your answers must be in the following language: "${language}", in formal language.
+    - Your answers must not contain any quotes.
+    `;
 
   let finalContentPrompt = '';
 
   if (isInit) {
     finalContentPrompt = `
-      ${initPrompt}
+      ${basePrompt}
       Say hello to start the conversation, 
       explain the purpose of the conversation 
       and ask the first question that corresponds to only one piece of information you need from the user.
-      Always answer as if you were talking directly to the user.
+      ${additionnalInstructions}
     `;
   } else {
     const lastQuestion = session.chatHistory.slice(-1)[0].content;
     const promptToExtractTypeOfData = `
-      ${initPrompt}
+      ${basePrompt}
       Here is the last question you asked the user: "${lastQuestion}".
       From this list of keys: "${Object.keys(dataToGetFromUser).join(', ')}", 
       and your last question, what is the best matching key? Only respond with the key.
@@ -133,7 +136,7 @@ app.post('/chat', async (req: Request, res: Response) => {
 
     const ExtractedTypeOfData = ExtractedTypeOfDataResponse.choices[0]?.message?.content?.trim() || '';
     const promptToValidateData = `
-      ${initPrompt}
+      ${basePrompt}
       Here is the last question you asked the user: "${lastQuestion}".
       Here is the user's answer: "${message}".
       Here is the list of valid answers: "${validOptions[ExtractedTypeOfData]?.join(', ')}".
@@ -158,10 +161,11 @@ app.post('/chat', async (req: Request, res: Response) => {
       const complete = Object.keys(dataToGetFromUser).every(key => session.data[key as keyof Session['data']]);
       if (complete) {
         finalContentPrompt = `
-          ${initPrompt}
+          ${basePrompt}
           Congratulations, you have all the data you need from the user.
           Explain to the user that you have all the data 
           and will now begin searching for the information.
+          ${additionnalInstructions}
         `;
         session.complete = true;
       } else {
@@ -169,17 +173,19 @@ app.post('/chat', async (req: Request, res: Response) => {
           .filter(key => !session.data[key as keyof Session['data']])
           .map(key => dataToGetFromUser[key]);
         finalContentPrompt = `
-          ${initPrompt}
+          ${basePrompt}
           Here is the missing data: ${missingData.join(', ')}.
           What is the next question to ask to complete the data? 
           Ask only one question at a time.
+          ${additionnalInstructions}
         `;
       }
     } else {
       finalContentPrompt = `
-        ${initPrompt}
+        ${basePrompt}
         The user's response: "${message}" does not match the valid options for the question: "${lastQuestion}".
         Explain to the user and ask the question again.
+        ${additionnalInstructions}
       `;
     }
   }
