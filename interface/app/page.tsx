@@ -4,6 +4,7 @@ import { useState, FormEvent, useEffect, useRef } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL;
+const NEXT_PUBLIC_DEBUG_MODE = process.env.NEXT_PUBLIC_DEBUG_MODE === "true";
 
 interface ChatMessage {
   role: "user" | "assistant";
@@ -188,9 +189,11 @@ const Home: React.FC = () => {
               {loading ? "Sending..." : "Send"}
             </button>
           </form>
-          <div className="pt-4">
-            Data extracted from chat : {JSON.stringify(session.data)}
-          </div>
+          {NEXT_PUBLIC_DEBUG_MODE && (
+            <div className="pt-4">
+              Data extracted from chat : {JSON.stringify(session.data)}
+            </div>
+          )}
         </div>
       </div>
     </div>
