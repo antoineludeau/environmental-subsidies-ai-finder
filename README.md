@@ -24,7 +24,7 @@ Interface :
 
 API :
 - Powered by **Node.js** for a scalable, non-blocking JavaScript runtime environment
-- Built with **Express 5**, a minimal and flexible Node.js framework for handling API routing and middleware
+- Built with **Express 4**, a minimal and flexible Node.js framework for handling API routing and middleware
 - Integrated with **MongoDB**, a NoSQL, document-oriented database for flexible and scalable data storage
 - Leveraging **OpenAI API** to utilize cutting-edge AI models for intelligent features
 
